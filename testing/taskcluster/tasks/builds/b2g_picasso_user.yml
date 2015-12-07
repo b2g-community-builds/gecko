@@ -1,0 +1,32 @@
+$inherits:
+  from: 'tasks/builds/b2g_phone_base.yml'
+  variables:
+    build_name: 'picasso-user'
+    build_type: 'opt'
+task:
+  deadline: '{{#from_now}}5 hours{{/from_now}}'
+  scopes:
+    - 'docker-worker:cache:build-picasso-user'
+  metadata:
+    name: '[TC] B2G picasso User'
+
+  payload:
+    cache:
+      build-picasso-user: /home/worker/object-folder
+    env:
+      TARGET: 'picasso'
+      DEBUG: 0
+    command:
+      - >
+        ./bin/build_it.sh
+  extra:
+    treeherderEnv:
+      - staging
+    treeherder:
+      symbol: B
+      groupSymbol: picasso
+      groupName: picasso Device Image
+      machine:
+        platform: b2g-device-image
+    locations:
+      img: 'private/build/picasso.zip'
