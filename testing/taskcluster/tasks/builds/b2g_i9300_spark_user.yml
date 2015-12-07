@@ -1,0 +1,33 @@
+$inherits:
+  from: 'tasks/builds/b2g_phone_base.yml'
+  variables:
+    build_name: 'i9300-spark-user'
+    build_type: 'opt'
+task:
+  deadline: '{{#from_now}}5 hours{{/from_now}}'
+  scopes:
+    - 'docker-worker:cache:build-i9300-spark-user'
+  metadata:
+    name: '[TC] B2G i9300 User (Spark)'
+
+  payload:
+    cache:
+      build-i9300-spark-user: /home/worker/object-folder
+    env:
+      TARGET: 'i9300'
+      DEBUG: 0
+      MOZHARNESS_CONFIG: b2g/taskcluster-spark.py
+    command:
+      - >
+        ./bin/build_it.sh
+  extra:
+    treeherderEnv:
+      - staging
+    treeherder:
+      symbol: B
+      groupSymbol: i9300
+      groupName: i9300 Device Image
+      machine:
+        platform: b2g-device-image
+    locations:
+      img: 'private/build/i9300.zip'
